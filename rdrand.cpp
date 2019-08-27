@@ -77,6 +77,7 @@
 // In general, the library's ASM code is best on Windows, and Intrinsics is
 //   the best code under GCC and compatibles. We favor them accordingly.
 //   The NASM code is optimized well on Linux, but its not easy to cut-in.
+#ifndef CRYPTOPP_DISABLE_ASM
 #if defined(CRYPTOPP_CPUID_AVAILABLE) && (CRYPTOPP_MSC_VERSION >= 1200)
 #  if CRYPTOPP_BOOL_RDRAND_ASM
 #    define MASM_RDRAND_ASM_AVAILABLE 1
@@ -99,6 +100,7 @@
 #  elif CRYPTOPP_BOOL_RDSEED_ASM
 #    define GCC_RDSEED_ASM_AVAILABLE 1
 #  endif
+#endif
 #endif
 
 // Debug diagnostics

@@ -467,7 +467,8 @@ std::string IntToString(T value, unsigned int base = 10)
 		return "0";
 
 	bool negate = false;
-	if (value < 0)
+	T zero = value-value; // a complicated way to express 0
+	if (value < zero)     // this trick is necessary to suppress the compiler warning '"value<0" is always false' for unsigned types
 	{
 		negate = true;
 		value = 0-value;	// VC .NET does not like -a
@@ -1068,11 +1069,13 @@ inline void SecureWipeArray(T *buf, size_t n)
 //! \note If you try to convert, say, the Chinese character for "bone" from UTF-16 (0x9AA8) to UTF-8
 //!   (0xE9 0xAA 0xA8), then you should ensure the locales are available. If the locales are not available,
 //!   then a 0x21 error is returned which eventually results in an InvalidArgument exception
-#ifndef CRYPTOPP_MAINTAIN_BACKWARDS_COMPATIBILITY_562
-static inline std::string StringNarrow(const wchar_t *str, bool throwOnError = true)
-#else
-static std::string StringNarrow(const wchar_t *str, bool throwOnError = true)
-#endif
+
+//#ifndef CRYPTOPP_MAINTAIN_BACKWARDS_COMPATIBILITY_562
+//static inline std::string StringNarrow(const wchar_t *str, bool throwOnError = true)
+//#else
+//static std::string StringNarrow(const wchar_t *str, bool throwOnError = true)
+//#endif
+inline std::string StringNarrow(const wchar_t *str, bool throwOnError = true)
 {
 	assert(str);
 	std::string result;

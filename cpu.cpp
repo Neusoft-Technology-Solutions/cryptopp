@@ -24,6 +24,10 @@
 
 NAMESPACE_BEGIN(CryptoPP)
 
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#endif
+
 #ifdef CRYPTOPP_CPUID_AVAILABLE
 
 #if _MSC_VER >= 1400 && CRYPTOPP_BOOL_X64
@@ -96,11 +100,15 @@ bool CpuId(word32 input, word32 output[4])
 		result = false;
 	else
 	{
+#if defined(__APPLE__)
+#if TARGET_OS_IPHONE
+		result = false;
+#else
 		asm volatile
 		(
 			// save ebx in case -fPIC is being used
 			// TODO: this might need an early clobber on EDI.
-# if CRYPTOPP_BOOL_X32 || CRYPTOPP_BOOL_X64
+# if (CRYPTOPP_BOOL_X32 || CRYPTOPP_BOOL_X64) && defined(__x86_64__)
 			"pushq %%rbx; cpuid; mov %%ebx, %%edi; popq %%rbx"
 # else
 			"push %%ebx; cpuid; mov %%ebx, %%edi; pop %%ebx"
@@ -108,8 +116,9 @@ bool CpuId(word32 input, word32 output[4])
 			: "=a" (output[0]), "=D" (output[1]), "=c" (output[2]), "=d" (output[3])
 			: "a" (input), "c" (0)
 		);
+#endif
+#endif
 	}
-
 	signal(SIGILL, oldHandler);
 	return result;
 #endif

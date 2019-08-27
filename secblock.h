@@ -75,6 +75,13 @@ public:
 
 #endif
 
+   // Needed by Dinkumware lib on QNX6.6
+   template<class _Uty>
+   void construct(_Uty *_Ptr)
+   {   // default construct
+      new ((void *)_Ptr) _Uty();
+   }
+   
 protected:
 	
 	//! \brief Verifies the allocator can satisfy a request based on size

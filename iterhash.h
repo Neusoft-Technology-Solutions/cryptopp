@@ -82,7 +82,7 @@ class CRYPTOPP_NO_VTABLE IteratedHashWithStaticTransform
 {
 public:
 	CRYPTOPP_CONSTANT(DIGESTSIZE = T_DigestSize ? T_DigestSize : T_StateSize)
-	unsigned int DigestSize() const {return DIGESTSIZE;};
+	unsigned int DigestSize() const {return DIGESTSIZE;}
 
 protected:
 	IteratedHashWithStaticTransform() {this->Init();}
